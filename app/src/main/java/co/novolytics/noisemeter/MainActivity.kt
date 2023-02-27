@@ -1,14 +1,18 @@
 package co.novolytics.noisemeter
 
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.IOException
@@ -16,6 +20,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.concurrent.thread
 import kotlin.math.log10
 
@@ -41,6 +46,9 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
     private lateinit var timer: Timer
     private lateinit var decibel: Decibel
+
+    val dbData : MutableMap<String, Any> = HashMap()
+    val fireStoreDatabase = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,6 +170,20 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         println("StopTime: $stopTime")
         println("android Id: $id")
         dbList = ArrayList<Double>()
+
+        dbData["Decibels"] = finalDbList
+        dbData["StartTime"] = startTime
+        dbData["StopTime"] = stopTime
+        dbData["DeviceId"] = id
+
+        fireStoreDatabase.collection("dbData")
+            .add(dbData)
+            .addOnSuccessListener {
+                Log.d(TAG, "Added document with ID ${it.id}")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "Error adding document $it")
+            }
 
         btnDone.isClickable = false
         btnDone.setImageResource(R.drawable.ic_done_disabled)

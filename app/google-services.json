@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "997162147327",
+    "project_id": "noise-meter-1",
+    "storage_bucket": "noise-meter-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997162147327:android:833fffee7ac852377a1bca",
+        "android_client_info": {
+          "package_name": "co.novolytics.noisemeter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997162147327-898i6l6rfh00q10k78b98eju9lisgmcm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIJhFxOfovLOuBopL0FFMeo5kmcjRP6vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997162147327-898i6l6rfh00q10k78b98eju9lisgmcm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

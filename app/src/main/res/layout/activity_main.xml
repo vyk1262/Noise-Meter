@@ -62,13 +62,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="@dimen/btn_size"
-            android:layout_height="@dimen/btn_size"
-            android:background="@drawable/ic_ripple"
-            android:src="@drawable/ic_delete_disabled" />
-
-        <ImageButton
             android:id="@+id/btnRecord"
             android:layout_width="66dp"
             android:layout_height="66dp"

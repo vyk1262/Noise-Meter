@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
     private var isRecording = false
     private var isPaused = false
 
-    //val dbList = arrayListOf(2)
     private var dbList = ArrayList<Double>()
     var id = ""
 
@@ -67,17 +66,11 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
         btnDone.setOnClickListener {
             stopRecorder()
+            File("$dirPath$filename.mp3")
             Toast.makeText(this, "Record Saved", Toast.LENGTH_SHORT).show()
         }
 
-        btnDelete.setOnClickListener {
-            stopRecorder()
-            File("$dirPath$filename.mp3")
-            Toast.makeText(this, "Record Deleted", Toast.LENGTH_SHORT).show()
-        }
-
         btnDone.isClickable = false
-        btnDelete.isClickable = false
     }
 
     override fun onRequestPermissionsResult(
@@ -147,13 +140,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         timer.start()
         decibel.start()
 
-
-        btnDelete.isClickable = true
-        btnDelete.setImageResource(R.drawable.ic_delete)
-
         btnDone.isClickable = true
         btnDone.setImageResource(R.drawable.ic_done)
-//        btnDone.visibility = View.VISIBLE
     }
 
     private fun stopRecorder() {
@@ -175,10 +163,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         println("android Id: $id")
         dbList = ArrayList<Double>()
 
-//        btnDone.visibility = View.VISIBLE
-        btnDelete.isClickable = false
         btnDone.isClickable = false
-        btnDelete.setImageResource(R.drawable.ic_delete_disabled)
         btnDone.setImageResource(R.drawable.ic_done_disabled)
         btnRecord.setImageResource(R.drawable.ic_record)
 

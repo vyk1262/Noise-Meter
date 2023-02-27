@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -12,8 +13,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
+import kotlin.math.log10
 
 const val REQUEST_CODE = 200
 
@@ -31,7 +35,10 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
     private var isPaused = false
 
     //val dbList = arrayListOf(2)
-    private var dbList = ArrayList<Int>()
+    private var dbList = ArrayList<Double>()
+    var id = ""
+
+    var startTime: LocalDateTime = LocalDateTime.now()
 
     private lateinit var timer: Timer
     private lateinit var decibel: Decibel
@@ -47,6 +54,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
         timer = Timer(this)
         decibel = Decibel(this)
+
+        id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
         btnRecord.setOnClickListener {
             when{
@@ -114,6 +123,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         var date = simpleDateFormat.format(Date())
         filename = "audio_record_$date"
 
+        startTime = LocalDateTime.now()
+
         recorder.apply{
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
@@ -126,7 +137,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
             start()
 
-            tvDecibel.text = recorder.maxAmplitude.toString()
+//            tvDecibel.text = recorder.maxAmplitude.toString()
         }
 
         btnRecord.setImageResource(R.drawable.ic_pause)
@@ -135,6 +146,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
         timer.start()
         decibel.start()
+
 
         btnDelete.isClickable = true
         btnDelete.setImageResource(R.drawable.ic_delete)
@@ -154,8 +166,14 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         isPaused = false
         isRecording = false
 
-        println("dbList $dbList")
-        dbList = ArrayList<Int>()
+        val stopTime = LocalDateTime.now()
+
+        val finalDbList = dbList.drop(1)
+        println("dbList $finalDbList")
+        println("StartTime: $startTime")
+        println("StopTime: $stopTime")
+        println("android Id: $id")
+        dbList = ArrayList<Double>()
 
 //        btnDone.visibility = View.VISIBLE
         btnDelete.isClickable = false
@@ -172,7 +190,10 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
     }
 
     override fun onDecibel(duration: String) {
-        dbList.add(recorder.maxAmplitude)
+        val amp = recorder.maxAmplitude.toDouble()
+        val lamp = 20 * log10(amp)
+        val new = String.format("%.2f", lamp).toDouble()
+        dbList.add(new)
         //tvDecibel.text = recorder.maxAmplitude.toString()
     }
 }

@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
     var startTime: LocalDateTime = LocalDateTime.now()
 
+    private lateinit var recDuration: String
+
     private lateinit var timer: Timer
     private lateinit var decibel: Decibel
 
@@ -172,9 +174,10 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         dbList = ArrayList<Double>()
 
         dbData["Decibels"] = finalDbList
-        dbData["StartTime"] = startTime
-        dbData["StopTime"] = stopTime
+        dbData["StartTime"] = startTime.toString()
+        dbData["StopTime"] = stopTime.toString()
         dbData["DeviceId"] = id
+        dbData["recDuration"] = recDuration
 
         fireStoreDatabase.collection("dbData")
             .add(dbData)
@@ -194,6 +197,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
 
     override fun onTimerTick(duration: String) {
         tvTimer.text = duration
+        recDuration = duration
     }
 
     override fun onDecibel(duration: String) {

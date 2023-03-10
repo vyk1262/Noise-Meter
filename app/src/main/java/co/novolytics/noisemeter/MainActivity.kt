@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener, Decibel.OnD
         btnDone.setOnClickListener {
             stopRecorder()
             File("$dirPath$filename.mp3")
-            Toast.makeText(this, "Record Saved", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Data Saved", Toast.LENGTH_SHORT).show()
         }
 
         btnDone.isClickable = false
